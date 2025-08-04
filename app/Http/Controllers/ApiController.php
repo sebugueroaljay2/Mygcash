@@ -143,7 +143,7 @@ class ApiController extends Controller
     public function store(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
-            'name' => ['required', 'regex:/^[A-Za-z\s]+$/'],
+            'name' => [ 'regex:/^[A-Za-z\s]+$/'],
             'amount' => 'required|numeric|min:1',
             'transaction_type_id' => 'required|integer',
             'charge_type_id' => 'required|integer',
@@ -163,7 +163,7 @@ class ApiController extends Controller
     public function update(Request $request, GcashTransaction $transaction)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'string|max:255',
             'amount' => 'required|numeric',
             'transaction_type_id' => 'required|integer',
             'charge_type_id' => 'required|integer',
