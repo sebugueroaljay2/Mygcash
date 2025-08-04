@@ -12,15 +12,18 @@ Route::get('/auth/{provider}/redirect', [SocialController::class, 'redirect'])
 Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])
     ->where('provider', 'google');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
+Route::get('/', function(){
+    return redirect()->guest('login');
+});
 
 
 Route::middleware([
@@ -31,7 +34,7 @@ Route::middleware([
     // Route::get('/dashboard', function () {
     //     return Inertia::render('Dashboard');
     // })->name('dashboard');
-    Route::get('/gcash/transactions', [GcashViewController::class, 'index'])->name('gcash.transactions');
+Route::get('/gcash/transactions', [GcashViewController::class, 'index'])->name('gcash.transactions');
 Route::get('/dashboard', [IncomeController::class, 'index'])->name('gcash.dashboard');
 });
 
