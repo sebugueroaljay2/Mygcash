@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('gcash_transactions', function (Blueprint $table) {
-            $table->string('charge')->nullable();
-            $table->string('transaction')->nullable();
+            $table->dropColumn('charge');
+            $table->dropColumn('transaction');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('gcash_transactions', function (Blueprint $table) {
-            $table->dropColumn('charge');
-            $table->dropColumn('transaction');
+            $table->string('charge')->nullable();
+            $table->string('transaction')->nullable();
         });
     }
 };
