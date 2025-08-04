@@ -28,11 +28,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Route::get('/dashboard', function () {
-    //     return Inertia::render('Dashboard');
-    // })->name('dashboard');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
     Route::get('/gcash/transactions', [GcashViewController::class, 'index'])->name('gcash.transactions');
-Route::get('/dashboard', [IncomeController::class, 'index'])->name('gcash.dashboard');
+Route::get('/gcash-dashboard', [IncomeController::class, 'index'])->name('gcash.dashboard');
 });
 
 // Route::get('/admin', function(){
