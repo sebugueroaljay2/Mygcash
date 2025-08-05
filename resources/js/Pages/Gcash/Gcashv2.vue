@@ -92,7 +92,7 @@ const totalPages = ref(1)
 const fetchTransactions = async (page = 1) => {
   isLoading.value = true
   try {
-    const response = await axios.get('https://laravel-app-production-1fbd.up.railway.app/api/transactions', {
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`, {
       params: {
         page,
         search: search.value,
@@ -131,7 +131,7 @@ watch(currentPage, (newPage) => {
 
 const submitAddForm = async () => {
     try {
-        await axios.post('https://laravel-app-production-1fbd.up.railway.app/api/add/transactions', form.value);
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/add/transactions`, form.value);
         ElNotification({
             title: 'Success',
             message: 'Successfully added!',
@@ -197,7 +197,7 @@ const submitForm = async () => {
 
 const updateTransaction = async () => {
     if (form.value.id) {
-        await axios.put(`https://laravel-app-production-1fbd.up.railway.app/api/update/transactions/${form.value.id}`, form.value);
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/update/transactions/${form.value.id}`, form.value);
     }
     editDialogVisible.value = false; // Close edit dialog
     await fetchTransactions(); // Refresh the transactions list
@@ -225,7 +225,7 @@ const deleteTransaction = async (id) => {
     isLoading.value = true;
 
     try {
-        const response = await axios.delete(`https://laravel-app-production-1fbd.up.railway.app/api/delete/transactions/${id}`);
+        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/delete/transactions/${id}`);
         ElMessage({
             type: 'success',
             message: response.data.message,
@@ -266,7 +266,7 @@ const deleteAllTransactions = async () => {
     isLoading.value = true;
 
     try {
-        const response = await axios.delete('https://laravel-app-production-1fbd.up.railway.app/api/delete/all/transactions');
+        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/delete/all/transactions`);
         ElMessage({
             type: 'success',
             message: response.data.message,
