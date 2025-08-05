@@ -9,7 +9,7 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'flowbite';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Gcash';
 
 createInertiaApp({
     title: (title) => ` ${appName} - ${title} `,
