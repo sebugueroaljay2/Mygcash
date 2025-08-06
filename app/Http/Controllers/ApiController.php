@@ -122,15 +122,15 @@ class ApiController extends Controller
         };
 
         $dailyIncome = $sumCharges(
-            (clone $baseIncomeQuery)->whereDate('created_at', Carbon::today())
+            (clone $baseIncomeQuery)->whereDate('created_at', Carbon::today('Asia/Manila'))
         );
 
         $weeklyIncome = $sumCharges(
-            (clone $baseIncomeQuery)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            (clone $baseIncomeQuery)->whereBetween('created_at', [Carbon::now('Asia/Manila')->startOfWeek(), Carbon::now('Asia/Manila')->endOfWeek()])
         );
 
         $monthlyIncome = $sumCharges(
-            (clone $baseIncomeQuery)->whereMonth('created_at', now()->month)
+            (clone $baseIncomeQuery)->whereMonth('created_at', Carbon::now('Asia/Manila')->month)
         );
 
         return response()->json([
@@ -200,20 +200,20 @@ class ApiController extends Controller
      public function stats()
     {
         // Sum charge from related charge_type (foreign key)
-        $dailyIncome = GcashTransaction::whereDate('created_at', Carbon::today())
+        $dailyIncome = GcashTransaction::whereDate('created_at', Carbon::today('Asia/Manila'))
             ->with('charge_type')
             ->get()
             ->sum(fn($tx) => $tx->charge_type->charges ?? 0);
 
         $weeklyIncome = GcashTransaction::whereBetween('created_at', [
-            Carbon::now()->startOfWeek(),
-            Carbon::now()->endOfWeek(),
+            Carbon::now('Asia/Manila')->startOfWeek(),
+            Carbon::now('Asia/Manila')->endOfWeek(),
         ])
             ->with('charge_type')
             ->get()
             ->sum(fn($tx) => $tx->charge_type->charges ?? 0);
 
-        $monthlyIncome = GcashTransaction::whereMonth('created_at', now()->month)
+        $monthlyIncome = GcashTransaction::whereMonth('created_at', Carbon::now('Asia/Manila')->month)
             ->with('charge_type')
             ->get()
             ->sum(fn($tx) => $tx->charge_type->charges ?? 0);
@@ -227,7 +227,7 @@ class ApiController extends Controller
 
     public function getDailyTransactionCount()
     {
-        $today = Carbon::today();
+        $today = Carbon::today('Asia/Manila');
 
         $cashinCount = GcashTransaction::whereDate('created_at', $today)
             ->whereHas('transaction_type', fn($q) => $q->where('name', 'Cash In'))
