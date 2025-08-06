@@ -11,6 +11,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('gcash.png') }}">
         <!-- Scripts -->
         @routes
         <!-- @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"]) -->
