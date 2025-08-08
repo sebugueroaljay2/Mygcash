@@ -10,7 +10,12 @@
 
 import axios from 'axios'
 
-axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'https://tame-jacynth-aljaydev-53c82294.koyeb.app'; // change kung iba URL mo
+const instance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    'Accept': 'application/json',
+  },
+  withCredentials: false,
+})
 
-export default axios
+export default instance
