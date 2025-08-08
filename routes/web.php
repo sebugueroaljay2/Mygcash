@@ -4,6 +4,7 @@ use App\Http\Controllers\GcashViewController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\SocialController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,8 +22,14 @@ Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])
 //     ]);
 // });
 
-Route::get('/', function(){
-    return redirect()->guest('login');
+// Route::get('/', function(){
+//     return redirect()->guest('login');
+// });
+
+Route::get('/', function () {
+    return Auth::check()
+        ? redirect()->route('gcash.dashboard')
+        : redirect()->route('login');
 });
 
 // Route::get('/', function () {
@@ -53,3 +60,5 @@ Route::get('/dashboard', [IncomeController::class, 'index'])->name('gcash.dashbo
 //  });
 
 // require __DIR__ .'/api.php';
+
+require __DIR__.'/auth.php';
