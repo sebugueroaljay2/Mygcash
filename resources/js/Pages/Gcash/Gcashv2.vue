@@ -92,7 +92,7 @@ const totalPages = ref(1)
 const fetchTransactions = async (page = 1) => {
   isLoading.value = true
   try {
-    const response = await axios.get('/api/transactions', {
+    const response = await axios.get('/transactions', {
       params: {
         page,
         search: search.value,
