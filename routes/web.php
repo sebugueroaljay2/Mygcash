@@ -12,18 +12,18 @@ Route::get('/auth/{provider}/redirect', [SocialController::class, 'redirect'])
 Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])
     ->where('provider', 'google');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-// Route::get('/', function(){
-//     return redirect()->guest('login');
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
 // });
+
+Route::get('/', function(){
+    return redirect()->guest('login');
+});
 
 // Route::get('/', function () {
 //     return response()->json(['message' => 'Laravel API is working!']);
