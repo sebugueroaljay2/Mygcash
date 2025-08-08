@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         // $this->call(RoleSeeder::class);
         // $this->call(AdminSeeder::class);
-        $this->call(TransactionTypeTableSeeder::class);
-        $this->call(ChargeTableSeeder::class);
+        // $this->call(TransactionTypeTableSeeder::class);
+        // $this->call(ChargeTableSeeder::class);
     }
 }
