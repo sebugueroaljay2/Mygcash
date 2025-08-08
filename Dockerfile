@@ -1,44 +1,33 @@
-# ===============================
-# Stage 1: Build frontend assets
-# ===============================
-FROM node:20 AS nodebuild
-
-WORKDIR /app
-
-# Copy only package files first (better layer caching)
-COPY package*.json ./
-
-# Install frontend dependencies
-RUN npm install
-
-# Copy rest of the app
-COPY . .
-
-# Build Vue frontend
-RUN npm run build
-
-
-# ===============================
-# Stage 2: Laravel backend with Nginx & PHP
-# ===============================
+# Use PHP + Nginx image
 FROM webdevops/php-nginx:8.2
 
 # Set working directory
 WORKDIR /app
 
-# Copy built app from node stage
-COPY --from=nodebuild /app /app
+# Copy project files
+COPY . .
 
-# Install Composer (from official composer image)
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Update & install Node.js + npm + git (for ziggy)
+RUN apt-get update && apt-get install -y npm git
 
-# Install Laravel PHP dependencies and cache configs
-RUN composer install --no-dev --optimize-autoloader && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Install PHP dependencies (no-dev for production)
+RUN composer install --no-dev --optimize-autoloader
 
-# Optional: fix file permissions
+# Install Node dependencies
+RUN npm install
+
+# Generate Ziggy routes (only if you're using ziggy in frontend)
+RUN php artisan ziggy:generate
+
+# Build frontend
+RUN npm run build
+
+# Laravel cache config/routes/views
+RUN php artisan config:cache \
+ && php artisan route:cache \
+ && php artisan view:cache
+
+# Set file permissions
 RUN chown -R application:application /app
 
 # Expose default web port
