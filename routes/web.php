@@ -21,10 +21,13 @@ Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])
 //     ]);
 // });
 
-Route::get('/', function(){
-    return redirect()->guest('login');
-});
+// Route::get('/', function(){
+//     return redirect()->guest('login');
+// });
 
+Route::get('/', function () {
+    return response()->json(['message' => 'Laravel API is working!']);
+});
 
 Route::middleware([
     'auth:sanctum',
