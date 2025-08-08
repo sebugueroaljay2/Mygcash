@@ -36,7 +36,7 @@ const selectedTypes = ref([]) // ⬅️ for checkbox filters
 
 
 // const fetchTransactions = async (page = 1) => {
-//     const response = await axios.get(`/api/transactions?page=${page}`);
+//     const response = await axios.get(`https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/transactions?page=${page}`);
 //     transactions.value = response.data;
 // };
 
@@ -63,7 +63,7 @@ const selectedTypes = ref([]) // ⬅️ for checkbox filters
 // const fetchTransactions = async (page = 1) => {
 //     isLoading.value = true;
 //     try {
-//         const response = await axios.get('/api/transactions', {
+//         const response = await axios.get('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/transactions', {
 //             params: {
 //                 page,
 //                 search: search.value,
@@ -92,7 +92,7 @@ const totalPages = ref(1)
 const fetchTransactions = async (page = 1) => {
   isLoading.value = true
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/transactions`, {
+    const response = await axios.get('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/transactions', {
       params: {
         page,
         search: search.value,
@@ -131,7 +131,7 @@ watch(currentPage, (newPage) => {
 
 const submitAddForm = async () => {
     try {
-        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/add/transactions`, form.value);
+        await axios.post('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/add/transactions', form.value);
         ElNotification({
             title: 'Success',
             message: 'Successfully added!',
@@ -197,7 +197,7 @@ const submitForm = async () => {
 
 const updateTransaction = async () => {
     if (form.value.id) {
-        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/update/transactions/${form.value.id}`, form.value);
+        await axios.put(`https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/update/transactions/${form.value.id}`, form.value);
     }
     editDialogVisible.value = false; // Close edit dialog
     await fetchTransactions(); // Refresh the transactions list
@@ -225,7 +225,7 @@ const deleteTransaction = async (id) => {
     isLoading.value = true;
 
     try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/delete/transactions/${id}`);
+        const response = await axios.delete(`https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/delete/transactions/${id}`);
         ElMessage({
             type: 'success',
             message: response.data.message,
@@ -266,7 +266,7 @@ const deleteAllTransactions = async () => {
     isLoading.value = true;
 
     try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/delete/all/transactions`);
+        const response = await axios.delete('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/delete/all/transactions');
         ElMessage({
             type: 'success',
             message: response.data.message,
