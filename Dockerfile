@@ -1,44 +1,43 @@
+# Stage 1: Build
+FROM node:20 AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install && npm run build
+
+# Stage 2: Laravel & PHP
 FROM php:8.2-fpm
 
-# 1. Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    zip \
-    unzip \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    npm \
-    nodejs \
+    git curl zip unzip \
+    libpng-dev libonig-dev libxml2-dev libzip-dev libjpeg-dev libfreetype6-dev \
+    nginx supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
 
-# 2. Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 3. Set working directory
 WORKDIR /var/www
 
-# 4. Copy project files
 COPY . .
 
-# 5. Install PHP & Node dependencies, build assets, cache config/routes/views
+COPY --from=build /app/public/js /var/www/public/js
+COPY --from=build /app/public/css /var/www/public/css
+
 RUN composer install --no-dev --optimize-autoloader \
-    && npm install \
-    && npm run build \
     && php artisan config:cache \
     && php artisan route:cache \
-    && php artisan view:cache
+    && php artisan view:cache \
+    && chown -R www-data:www-data /var/www
 
-# 6. Set proper permissions
-RUN chown -R www-data:www-data /var/www
+# Nginx config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# 7. Expose port for FPM (optional if reverse proxy)
-EXPOSE 9000
+# Supervisor config
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# 8. Start php-fpm (production-ready)
-CMD ["php-fpm"]
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord"]
