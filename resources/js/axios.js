@@ -11,6 +11,6 @@
 import axios from 'axios'
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://127.0.0.1:8000' // change kung iba URL mo
+axios.defaults.baseURL = 'https://tame-jacynth-aljaydev-53c82294.koyeb.app'; // change kung iba URL mo
 
 export default axios
