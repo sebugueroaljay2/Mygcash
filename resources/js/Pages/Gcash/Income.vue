@@ -16,7 +16,7 @@ const today = ref(new Date().toISOString().slice(0, 10))
 
 const fetchCounts = async () => {
     try {
-        const res = await axios.get('/daily-transaction-count')
+        const res = await axios.get('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/daily-transaction-count')
         cashinCount.value = res.data.cashin_count
         cashoutCount.value = res.data.cashout_count
         today.value = res.data.date
@@ -42,7 +42,7 @@ onMounted(() => {
 const fetchIncomeStats = async () => {
     
     try {
-        const response = await axios.get('/income/income') // Or a custom route if needed
+        const response = await axios.get('https://tame-jacynth-aljaydev-53c82294.koyeb.app/api/income/income') // Or a custom route if needed
 
         dailyIncome.value = response.data.daily_income
         weeklyIncome.value = response.data.weekly_income
