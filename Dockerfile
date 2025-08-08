@@ -1,43 +1,45 @@
-# Stage 1: Build
-FROM node:20 AS build
+# ===============================
+# Stage 1: Build frontend assets
+# ===============================
+FROM node:20 AS nodebuild
 
 WORKDIR /app
 
+# Copy only package files first (better layer caching)
+COPY package*.json ./
+
+# Install frontend dependencies
+RUN npm install
+
+# Copy rest of the app
 COPY . .
 
-RUN npm install && npm run build
+# Build Vue frontend
+RUN npm run build
 
-# Stage 2: Laravel & PHP
-FROM php:8.2-fpm
 
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip \
-    libpng-dev libonig-dev libxml2-dev libzip-dev libjpeg-dev libfreetype6-dev \
-    nginx supervisor \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+# ===============================
+# Stage 2: Laravel backend with Nginx & PHP
+# ===============================
+FROM webdevops/php-nginx:8.2
 
+# Set working directory
+WORKDIR /app
+
+# Copy built app from node stage
+COPY --from=nodebuild /app /app
+
+# Install Composer (from official composer image)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+# Install Laravel PHP dependencies and cache configs
+RUN composer install --no-dev --optimize-autoloader && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
 
-COPY . .
+# Optional: fix file permissions
+RUN chown -R application:application /app
 
-COPY --from=build /app/public/js /var/www/public/js
-COPY --from=build /app/public/css /var/www/public/css
-
-RUN composer install --no-dev --optimize-autoloader \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && chown -R www-data:www-data /var/www
-
-# Nginx config
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Supervisor config
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
+# Expose default web port
 EXPOSE 80
-
-CMD ["/usr/bin/supervisord"]
