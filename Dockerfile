@@ -37,8 +37,8 @@ RUN composer install --no-dev --optimize-autoloader \
 # 6. Set proper permissions
 RUN chown -R www-data:www-data /var/www
 
-# 7. Expose port (for Laravel server)
-EXPOSE 8000
+# 7. Expose port for FPM (optional if reverse proxy)
+EXPOSE 9000
 
-# 8. Start Laravel server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# 8. Start php-fpm (production-ready)
+CMD ["php-fpm"]
