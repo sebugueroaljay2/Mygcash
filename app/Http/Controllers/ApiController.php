@@ -78,7 +78,7 @@ class ApiController extends Controller
     // }
 
 
-    
+
 
     public function index(Request $request)
     {
@@ -117,7 +117,7 @@ class ApiController extends Controller
         // Helper to get sum of charges by date range
         $sumCharges = function ($query) {
             return $query->get()->sum(function ($tx) {
-                return optional($tx->charge_type)->charges ?? 0;
+                return optional($tx->charge_type)->charge ?? 0;
             });
         };
 
@@ -143,7 +143,7 @@ class ApiController extends Controller
     public function store(Request $request)
     {
         $validator = FacadesValidator::make($request->all(), [
-            'name' => [ 'regex:/^[A-Za-z\s]+$/'],
+            'name' => ['required', 'regex:/^[A-Za-z\s]+$/'],
             'amount' => 'required|numeric|min:1',
             'transaction_type_id' => 'required|integer',
             'charge_type_id' => 'required|integer',
@@ -163,7 +163,7 @@ class ApiController extends Controller
     public function update(Request $request, GcashTransaction $transaction)
     {
         $validated = $request->validate([
-            'name' => 'string|max:255',
+            'name' => 'required|string|max:255',
             'amount' => 'required|numeric',
             'transaction_type_id' => 'required|integer',
             'charge_type_id' => 'required|integer',
@@ -197,7 +197,7 @@ class ApiController extends Controller
         ]);
     }
 
-     public function stats()
+    public function stats()
     {
         // Sum charge from related charge_type (foreign key)
         $dailyIncome = GcashTransaction::whereDate('created_at', Carbon::today())

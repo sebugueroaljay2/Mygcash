@@ -22,19 +22,11 @@ Route::get('/auth/{provider}/callback', [SocialController::class, 'callback'])
 //     ]);
 // });
 
-// Route::get('/', function(){
-//     return redirect()->guest('login');
-// });
-
 Route::get('/', function () {
     return Auth::check()
         ? redirect()->route('gcash.dashboard')
         : redirect()->route('login');
 });
-
-// Route::get('/', function () {
-//     return response()->json(['message' => 'Laravel API is working!']);
-// });
 
 Route::middleware([
     'auth:sanctum',
@@ -44,7 +36,7 @@ Route::middleware([
     // Route::get('/dashboard', function () {
     //     return Inertia::render('Dashboard');
     // })->name('dashboard');
-Route::get('/gcash/transactions', [GcashViewController::class, 'index'])->name('gcash.transactions');
+    Route::get('/gcash/transactions', [GcashViewController::class, 'index'])->name('gcash.transactions');
 Route::get('/dashboard', [IncomeController::class, 'index'])->name('gcash.dashboard');
 });
 
@@ -60,5 +52,3 @@ Route::get('/dashboard', [IncomeController::class, 'index'])->name('gcash.dashbo
 //  });
 
 // require __DIR__ .'/api.php';
-
-require __DIR__.'/auth.php';
